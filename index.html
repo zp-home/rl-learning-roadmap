@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>强化学习学习路径 - Learning Roadmap</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #7e22ce 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+            color: white;
+        }
+        
+        header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .tree-container {
+            background: white;
+            border-radius: 20px;
+            padding: 60px 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        
+        .tree {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 40px;
+        }
+        
+        .node {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+            position: relative;
+            min-width: 300px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .node:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.6);
+        }
+        
+        .node.completed {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        }
+        
+        .node.in-progress {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 8px 25px rgba(245, 87, 108, 0.4); }
+            50% { box-shadow: 0 8px 35px rgba(245, 87, 108, 0.7); }
+        }
+        
+        .node.future {
+            background: linear-gradient(135deg, #a8a8a8 0%, #c0c0c0 100%);
+            opacity: 0.7;
+        }
+        
+        .node h3 {
+            font-size: 1.5em;
+            margin-bottom: 8px;
+        }
+        
+        .node p {
+            font-size: 0.95em;
+            opacity: 0.9;
+        }
+        
+        .node .status {
+            position: absolute;
+            top: -12px;
+            right: -12px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3em;
+            background: white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        
+        .connector {
+            width: 4px;
+            height: 40px;
+            background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        .connector::before,
+        .connector::after {
+            content: '';
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: #667eea;
+            border-radius: 50%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .connector::before {
+            top: -6px;
+        }
+        
+        .connector::after {
+            bottom: -6px;
+        }
+        
+        .branch-container {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        
+        .branch {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            min-width: 250px;
+            border-left: 4px solid #667eea;
+            transition: all 0.3s ease;
+        }
+        
+        .branch:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+        }
+        
+        .branch h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+        
+        .branch p {
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 40px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .legend-box {
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+        }
+        
+        .legend-box.completed {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        }
+        
+        .legend-box.in-progress {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        
+        .legend-box.future {
+            background: linear-gradient(135deg, #a8a8a8 0%, #c0c0c0 100%);
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background: #e0e0e0;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 30px 0;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #11998e 0%, #38ef7d 100%);
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 15px;
+            color: white;
+            font-weight: bold;
+            transition: width 1s ease;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: white;
+            opacity: 0.8;
+        }
+        
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2em;
+            }
+            
+            .node {
+                min-width: 250px;
+                padding: 20px 30px;
+            }
+            
+            .branch-container {
+                flex-direction: column;
+            }
+            
+            .legend {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎯 强化学习学习路径</h1>
+            <p>从入门到实战的完整学习树</p>
+        </header>
+        
+        <div class="tree-container">
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 22%;">
+                    22% 完成
+                </div>
+            </div>
+            
+            <div class="tree">
+                <!-- 1. Bilibili 已完成 -->
+                <div class="node completed">
+                    <span class="status">✓</span>
+                    <h3>1. Bilibili 视频课程</h3>
+                    <p>强化学习入门基础</p>
+                </div>
+                
+                <div class="connector"></div>
+                
+                <!-- 2. AlphaStar PDF 进行中 -->
+                <div class="node in-progress">
+                    <span class="status">▶</span>
+                    <h3>2. AlphaStar PDF</h3>
+                    <p>深度强化学习经典论文研读</p>
+                </div>
+                
+                <div class="branch-container">
+                    <div class="branch">
+                        <h4>📄 当前论文</h4>
+                        <p>AlphaStar 技术细节分析</p>
+                        <p style="margin-top: 8px; color: #f5576c; font-weight: bold;">正在学习中...</p>
+                    </div>
+                </div>
+                
+                <div class="connector"></div>
+                
+                <!-- 3. Lillog 科普 -->
+                <div class="node future">
+                    <h3>3. Lillog 博客</h3>
+                    <p>基本科普，了解核心概念</p>
+                </div>
+                
+                <div class="connector"></div>
+                
+                <!-- 4. Sutton 书 -->
+                <div class="node future">
+                    <h3>4. Sutton & Barto 教材</h3>
+                    <p>夯实理论逻辑基础</p>
+                </div>
+                
+                <div class="connector"></div>
+                
+                <!-- 5. TorchBeast -->
+                <div class="node future">
+                    <h3>5. TorchBeast 实践</h3>
+                    <p>落实代码实现能力</p>
+                </div>
+                
+                <div class="connector"></div>
+                
+                <!-- 6. 项目架构 -->
+                <div class="node future">
+                    <h3>6. 项目架构设计</h3>
+                    <p>完整系统架构规划</p>
+                </div>
+                
+                <div class="branch-container">
+                    <div class="branch">
+                        <h4>🏗️ 模型架构</h4>
+                        <p>神经网络结构设计</p>
+                    </div>
+                    <div class="branch">
+                        <h4>⚙️ 训练架构</h4>
+                        <p>分布式训练流程</p>
+                    </div>
+                    <div class="branch">
+                        <h4>🎮 模拟环境架构</h4>
+                        <p>游戏环境搭建</p>
+                    </div>
+                </div>
+                
+                <div class="connector"></div>
+                
+                <!-- 7. 看代码 -->
+                <div class="node future">
+                    <h3>7. 代码深度阅读</h3>
+                    <p>研究开源实现细节</p>
+                </div>
+                
+                <div class="connector"></div>
+                
+                <!-- 8. Qt -->
+                <div class="node future">
+                    <h3>8. Qt 界面开发</h3>
+                    <p>可视化工具构建</p>
+                </div>
+                
+                <div class="connector"></div>
+                
+                <!-- 9. 干活 -->
+                <div class="node future">
+                    <h3>9. 🚀 实战项目</h3>
+                    <p>完整项目开发与部署</p>
+                </div>
+            </div>
+            
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-box completed"></div>
+                    <span>已完成</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-box in-progress"></div>
+                    <span>进行中</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-box future"></div>
+                    <span>待学习</span>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>💪 坚持学习，持续进步</p>
+            <p style="margin-top: 10px; font-size: 0.9em;">生成时间：2026-05-08</p>
+        </footer>
+    </div>
+    
+    <script>
+        // 添加点击节点显示详情的交互
+        document.querySelectorAll('.node').forEach(node => {
+            node.addEventListener('click', function() {
+                const title = this.querySelector('h3').textContent;
+                const desc = this.querySelector('p').textContent;
+                const status = this.classList.contains('completed') ? '已完成' : 
+                              this.classList.contains('in-progress') ? '进行中' : '待学习';
+                
+                alert(`${title}\n\n${desc}\n\n状态：${status}`);
+            });
+        });
+        
+        // 进度条动画
+        window.addEventListener('load', function() {
+            const progressFill = document.querySelector('.progress-fill');
+            progressFill.style.width = '0%';
+            setTimeout(() => {
+                progressFill.style.width = '22%';
+            }, 100);
+        });
+    </script>
+</body>
+</html>
